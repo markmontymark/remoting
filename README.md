@@ -60,4 +60,15 @@ Log
 	
 
 
+## dev
+
+	## pull down src
+	git clone git@github.com:markmontymark/remoting.git
+
+	## edit files in remoting/
+	## then, run dev_appserver.py to test locally
+	dev_appserver.py remoting
+	./test.sh
+	## when done dev/testing, deploy
+	appcfg.py update remoting
 
