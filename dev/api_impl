@@ -1,0 +1,22 @@
+func(serv SimpleService) List%%collection%%()[]%%object%%{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   return %%collectionlc%%.List()
+}
+
+func(serv SimpleService) View%%object%%(id string)%%object%%{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   return %%collectionlc%%.View(id)
+}
+
+func(serv SimpleService) Add%%object%%(i %%object%%){
+   itemAdded := %%collectionlc%%.Add(i)
+   serv.ResponseBuilder().Created(
+      "http://localhost:8080/simple-service/%%collectionlc%%/"+string(itemAdded.Id))
+}
+
+func(serv SimpleService) Delete%%object%%(id string) {
+   %%collectionlc%%.Delete(id)
+   serv.ResponseBuilder().SetResponseCode(404).Overide(true)
+   return
+}
+

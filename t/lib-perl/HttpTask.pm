@@ -13,25 +13,24 @@ sub run
 {
 	my $self = shift;
 
-	my $do_pre_echo = $self->method && $self->method =~ /POST/i;
-
-	my $process;
-	if($self->query)
+	my $process = join ' ','curl -s --request', $self->method;
+	unless($self->query)
 	{
-		my @retval = ();
-		for(@{$self->query})
-		{
-			$process = $do_pre_echo ? 
-				sprintf("echo '%s'|%s %s", JSON::XS::encode_json($_), $self->method , $self->url) :
-				sprintf("%s %s", $self->method , $self->url);
-			print STDERR "$process\n";
-			push @retval, `$process`;
-		}
-		return join "\n",@retval;
-	} 
-	$process = $self->method . ' ' . $self->url;
-	print STDERR "$process\n";
-	return `$process`;
+		$process .= ' ' . $self->url;
+		print STDERR "$process\n";
+		return `$process`;
+	}
+
+	my @retval = ();
+	for(@{$self->query})
+	{
+		my $q = JSON::XS::encode_json($_);
+		$q =~ s/"/\\"/g;
+		my $process_post = join ' ',$process, '--data', '"',$q ,'"', $self->url;
+		print STDERR "$process_post\n";
+		push @retval, `$process_post`;
+	}
+	return join "\n",@retval;
 }
 
 1;

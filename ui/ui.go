@@ -10,16 +10,26 @@ import (
 	"appengine"
 	//"appengine/datastore"
 	"appengine/user"
+
+	"encoding/json"
 )
 
-var locationStore map[int]Location
-
-type Rater interface {
-	Rate() int
-}
+var ratings Ratings
+var users Users //map[int]User 
+var foods Foods
+var busstops BusStops
+var routes Routes
+var neighborhoods Neighborhoods
+var workplaces Workplaces
+var restaurants Restaurants
+var meetingplaces MeetingPlaces
 
 type Mappable interface {
 	GetMapLink()
+}
+
+type Ided struct {
+	Id string
 }
 
 type Locator interface {
@@ -34,6 +44,23 @@ type Address struct {
 	street string
 	neighborhood string
 }
+/*
+type Food struct {
+	name string
+	rating Rating // 0-9 scale, 1-5 stars?
+	Rater
+}
+*/
+
+type Location struct {
+	Name string
+	has_wifi bool
+	num_wifi int
+	num_outlets int
+	Locator
+	Rater
+	Seating
+}
 
 type BusStopLocation struct {
 	Locator
@@ -43,35 +70,6 @@ type BusStopLocation struct {
 func (this BusStopLocation) Locate () {
 }
 func (this BusStopLocation) Rate () {
-}
-
-type Rating struct {
-	rating int
-}
-
-type Food struct {
-	name string
-	rating Rating // 0-9 scale, 1-5 stars?
-	Rater
-}
-
-func (this Rating) SetRating(r int) {
-	if r < 0 {
-		this.rating = 0
-	} else if r > 5{
-		this.rating = 5
-	}
-	this.rating = r
-}
-
-type Location struct {
-	Locator
-	Rater
-	Name string
-	menu []Food
-	has_wifi bool
-	num_wifi int
-	num_outlets int
 }
 type NeighborhoodLocation struct {
 	Location
@@ -84,8 +82,8 @@ type Seating struct {
 		available_outlets int
 }
 
-
-type WorkLocation struct {
+/*
+type WorkplaceLocation struct {
 	Location
 	Locator
 	Rating
@@ -109,13 +107,11 @@ type MeetingLocation struct {
 	Rater	
 }
 
-type Route struct {
-	busStops []BusStopLocation
-}
+*/
 
-type User struct {
-	Worker
-}
+//type Route struct {
+	//busStops []BusStopLocation
+//}
 
 type WorkLog struct {
 	timeIn time.Time
@@ -130,48 +126,23 @@ type DaysWork struct {
 	worklog []WorkLog
 }
 
-
-type SimpleService struct{
-    //Service level config
-    gorest.RestService    `root:"/simple-service/" consumes:"application/json" produces:"application/json"`
-
-    //End-Point level configs: Field names must be the same as the corresponding method names,
-    // but not-exported (starts with lowercase)
-    //discover    gorest.EndPoint `method:"GET"  path:"/discover/"      output:"Discover"`
-    //viewUser gorest.EndPoint `method:"GET"  path:"/user/{Id:int}" output:"User"`
-    listLocations   gorest.EndPoint `method:"GET"  path:"/locations/"         output:"[]Location"`
-    //listItems   gorest.EndPoint `method:"GET"  path:"/items/"         output:"[]Item"`
-    //addItem     gorest.EndPoint `method:"POST" path:"/items/"         postdata:"Item"`
-
-    //On a real app for placeOrder below, the POST URL would probably be just /orders/, this is just to
-    // demo the ability of mixing post-data parameters with URL mapped parameters.
-    //placeOrder  gorest.EndPoint `method:"POST"   path:"/orders/new/{UserId:int}/{RequestDiscount:bool}" postdata:"Order"`
-    //work  gorest.EndPoint `method:"POST"   path:"/work/new/{UserId:int}/{Location:LocationId}" postdata:"Order"`
-    //viewOrder   gorest.EndPoint `method:"GET"    path:"/orders/{OrderId:int}"                           output:"Order"`
-    //deleteOrder gorest.EndPoint `method:"DELETE" path:"/orders/{OrderId:int}"`
-    //listOrders  gorest.EndPoint `method:"GET"  path:"/orders/"         output:"[]Order"`
-}
-
-func(serv SimpleService) ListLocations()[]Location{
-	serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
-	retval := make([]Location,0)
-	for _,v := range locationStore {
-		retval = append(retval,v)
-	}
-	return retval
-}
-
-
-
 func init() {
+
+	ratings = NewRatings() //make(map[int]Rating)
+	users = NewUsers() //	users = make(map[int]User)
+	foods = NewFoods()
+	busstops = NewBusStops()
+	routes = NewRoutes()
+	neighborhoods = NewNeighborhoods()
+	workplaces = NewWorkplaces()
+	restaurants = NewRestaurants()
+	meetingplaces = NewMeetingPlaces()
+
 	gorest.RegisterService(new(SimpleService))
 	http.Handle("/",gorest.Handle())
-	http.HandleFunc("/squirrel", appHandler)
 	http.HandleFunc("/user", userHandler)
-}
 
-func appHandler (w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, quirreld!")
+	http.HandleFunc("/dump",dumpHandler)
 }
 
 func userHandler(w http.ResponseWriter, r *http.Request) {
@@ -188,4 +159,25 @@ func userHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Fprintf(w, "Hello, %v!", u)
+}
+
+func dumpHandler(w http.ResponseWriter, r *http.Request) {
+	b,_ := json.Marshal(ratings)
+	fmt.Fprintf(w, "Ratings\n----\n%s\n\n", b)
+	b,_  = json.Marshal(users)
+	fmt.Fprintf(w, "Users\n----\n%s\n\n", b)
+	b,_  = json.Marshal(foods)
+	fmt.Fprintf(w, "Foods\n----\n%s\n\n",  b)
+	b,_  = json.Marshal(busstops)
+	fmt.Fprintf(w, "BusStops\n----\n%s\n\n",  b)
+	b,_  = json.Marshal(routes)
+	fmt.Fprintf(w, "Routes\n----\n%s\n\n",  b)
+	b,_  = json.Marshal(neighborhoods)
+	fmt.Fprintf(w, "Neighborhoods\n----\n%s\n\n",  b)
+	b,_  = json.Marshal(workplaces)
+	fmt.Fprintf(w, "Workplaces\n----\n%s\n\n",  b)
+	b,_  = json.Marshal(restaurants)
+	fmt.Fprintf(w, "Restaurants\n----\n%s\n\n",  b)
+	b,_  = json.Marshal(meetingplaces)
+	fmt.Fprintf(w, "MeetingPlaces \n----\n%s\n\n", b)
 }

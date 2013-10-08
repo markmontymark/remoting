@@ -1,0 +1,54 @@
+package ui
+
+type %%object%%s struct {
+	collection map[string]%%object%%
+	PublicAPI
+}
+
+func New%%object%%s () %%object%%s {
+	obj := %%object%%s{}
+	obj.collection = make(map[string]%%object%%,0)
+	return obj
+}
+
+func(this %%object%%s) List()[]%%object%% {
+	retval := make([]%%object%%,0)
+	for _,v := range this.collection {
+		retval = append(retval,v)
+	}
+	return retval
+}
+
+func(this %%object%%s) View(id string)%%object%%{
+	for ratingId,rating := range this.collection {
+		if id == ratingId {
+			return rating
+		}
+	}
+	return %%object%%{}
+}
+
+func(this %%object%%s) Add(i %%object%%) %%object%%{
+    for id,item := range this.collection {
+        if id == i.Id {
+            item = i
+            return item
+        }
+    }
+
+    //Item Id not in database, so create new
+    i.Id = string(len(this.collection))
+    this.collection[i.Id] = i
+    return i
+}
+
+func(this %%object%%s) Delete(id string) {
+	for Id, _ := range this.collection {
+		if Id == id {
+			delete(this.collection,Id) // this borks things that are linked with this rating
+			return  //Default http code for DELETE is 200
+		}
+	}
+}
+
+
