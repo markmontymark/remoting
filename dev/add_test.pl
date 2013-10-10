@@ -1,4 +1,3 @@
-
 #!/usr/bin/env perl
 
 use Test::More;
@@ -18,16 +17,16 @@ my $baseurl = "http://localhost:$port/simple-service";
 
 my $tasks = [
 
-	GET->new( 
-		url => "$baseurl/%%collectionlc%%" ),
+	##GET->new( url => "$baseurl/%%collectionlc%%" ),
+
 	POST->new( 
 		url => "$baseurl/%%objectlc%%",
 		query => [
-			{Id=>"0",%%object%%=> 4},
-			{Id=>"1",%%object%%=> 3},
-			{Id=>"2",%%object%%=> 2},
-			{Id=>"3",%%object%%=> 5},
-			{Id=>"4",%%object%%=> 1},
+			{Id=>0,%%object%%=> 4},
+			{Id=>1,%%object%%=> 3},
+			{Id=>2,%%object%%=> 2},
+			{Id=>3,%%object%%=> 5},
+			{Id=>4,%%object%%=> 1},
 		]),
 
 	TestUrl->new(
@@ -35,7 +34,7 @@ my $tasks = [
 		decode => \&JSON::XS::decode_json,
 		tests => [ sub{
 			my $data = shift;
-			ok scalar @$data == 5, "Added 5 %%collectionlc%%";
+			is scalar @$data , 5, "Added 5 %%collectionlc%%";
 		}]
 		),
 
@@ -44,9 +43,11 @@ my $tasks = [
 		decode => \&JSON::XS::decode_json,
 		tests => [ sub{
 			my $data = shift;
-			ok $data->{%%object%%} == 5 && $data->{Id} == 3, "View a %%objectlc%%";
+			is $data->{Name}, 'Add Name', 'View a %%objectlc%%, name check';
+			is $data->{Id} , 3, "View a %%objectlc%%";
 		}]
 		),
+
 	DELETE->new( 
 		url => "$baseurl/%%objectlc%%/3" ),
 

@@ -16,85 +16,86 @@ type SimpleService struct{
 	
 // For the User type
 listUsers   gorest.EndPoint `method:"GET"    path:"/users/"               output:"[]User"`
-viewUser    gorest.EndPoint `method:"GET"    path:"/user/{UserId:string}"  output:"User"`
+viewUser    gorest.EndPoint `method:"GET"    path:"/user/{UserId:int}"  output:"User"`
 addUser     gorest.EndPoint `method:"POST"   path:"/user/"                postdata:"User"`
-deleteUser  gorest.EndPoint `method:"DELETE" path:"/user/{UserId:string}"`
+deleteUser  gorest.EndPoint `method:"DELETE" path:"/user/{UserId:int}"`
 
 
 
 // For the Rating type
 listRatings   gorest.EndPoint `method:"GET"    path:"/ratings/"               output:"[]Rating"`
-viewRating    gorest.EndPoint `method:"GET"    path:"/rating/{RatingId:string}"  output:"Rating"`
+viewRating    gorest.EndPoint `method:"GET"    path:"/rating/{RatingId:int}"  output:"Rating"`
 addRating     gorest.EndPoint `method:"POST"   path:"/rating/"                postdata:"Rating"`
-deleteRating  gorest.EndPoint `method:"DELETE" path:"/rating/{RatingId:string}"`
+deleteRating  gorest.EndPoint `method:"DELETE" path:"/rating/{RatingId:int}"`
 
 
 
 // For the Food type
 listFoods   gorest.EndPoint `method:"GET"    path:"/foods/"               output:"[]Food"`
-viewFood    gorest.EndPoint `method:"GET"    path:"/food/{FoodId:string}"  output:"Food"`
+viewFood    gorest.EndPoint `method:"GET"    path:"/food/{FoodId:int}"  output:"Food"`
 addFood     gorest.EndPoint `method:"POST"   path:"/food/"                postdata:"Food"`
-deleteFood  gorest.EndPoint `method:"DELETE" path:"/food/{FoodId:string}"`
+deleteFood  gorest.EndPoint `method:"DELETE" path:"/food/{FoodId:int}"`
 
 
 
 // For the BusStop type
 listBusStops   gorest.EndPoint `method:"GET"    path:"/busstops/"               output:"[]BusStop"`
-viewBusStop    gorest.EndPoint `method:"GET"    path:"/busstop/{BusStopId:string}"  output:"BusStop"`
+viewBusStop    gorest.EndPoint `method:"GET"    path:"/busstop/{BusStopId:int}"  output:"BusStop"`
 addBusStop     gorest.EndPoint `method:"POST"   path:"/busstop/"                postdata:"BusStop"`
-deleteBusStop  gorest.EndPoint `method:"DELETE" path:"/busstop/{BusStopId:string}"`
+deleteBusStop  gorest.EndPoint `method:"DELETE" path:"/busstop/{BusStopId:int}"`
 
 
 
 // For the Neighborhood type
 listNeighborhoods   gorest.EndPoint `method:"GET"    path:"/neighborhoods/"               output:"[]Neighborhood"`
-viewNeighborhood    gorest.EndPoint `method:"GET"    path:"/neighborhood/{NeighborhoodId:string}"  output:"Neighborhood"`
+viewNeighborhood    gorest.EndPoint `method:"GET"    path:"/neighborhood/{NeighborhoodId:int}"  output:"Neighborhood"`
 addNeighborhood     gorest.EndPoint `method:"POST"   path:"/neighborhood/"                postdata:"Neighborhood"`
-deleteNeighborhood  gorest.EndPoint `method:"DELETE" path:"/neighborhood/{NeighborhoodId:string}"`
+deleteNeighborhood  gorest.EndPoint `method:"DELETE" path:"/neighborhood/{NeighborhoodId:int}"`
 
 
 
 // For the Workplace type
 listWorkplaces   gorest.EndPoint `method:"GET"    path:"/workplaces/"               output:"[]Workplace"`
-viewWorkplace    gorest.EndPoint `method:"GET"    path:"/workplace/{WorkplaceId:string}"  output:"Workplace"`
+viewWorkplace    gorest.EndPoint `method:"GET"    path:"/workplace/{WorkplaceId:int}"  output:"Workplace"`
 addWorkplace     gorest.EndPoint `method:"POST"   path:"/workplace/"                postdata:"Workplace"`
-deleteWorkplace  gorest.EndPoint `method:"DELETE" path:"/workplace/{WorkplaceId:string}"`
+deleteWorkplace  gorest.EndPoint `method:"DELETE" path:"/workplace/{WorkplaceId:int}"`
 
 
 
 // For the Restaurant type
 listRestaurants   gorest.EndPoint `method:"GET"    path:"/restaurants/"               output:"[]Restaurant"`
-viewRestaurant    gorest.EndPoint `method:"GET"    path:"/restaurant/{RestaurantId:string}"  output:"Restaurant"`
+viewRestaurant    gorest.EndPoint `method:"GET"    path:"/restaurant/{RestaurantId:int}"  output:"Restaurant"`
 addRestaurant     gorest.EndPoint `method:"POST"   path:"/restaurant/"                postdata:"Restaurant"`
-deleteRestaurant  gorest.EndPoint `method:"DELETE" path:"/restaurant/{RestaurantId:string}"`
+deleteRestaurant  gorest.EndPoint `method:"DELETE" path:"/restaurant/{RestaurantId:int}"`
 
 
 
 // For the MeetingPlace type
 listMeetingPlaces   gorest.EndPoint `method:"GET"    path:"/meetingplaces/"               output:"[]MeetingPlace"`
-viewMeetingPlace    gorest.EndPoint `method:"GET"    path:"/meetingplace/{MeetingPlaceId:string}"  output:"MeetingPlace"`
+viewMeetingPlace    gorest.EndPoint `method:"GET"    path:"/meetingplace/{MeetingPlaceId:int}"  output:"MeetingPlace"`
 addMeetingPlace     gorest.EndPoint `method:"POST"   path:"/meetingplace/"                postdata:"MeetingPlace"`
-deleteMeetingPlace  gorest.EndPoint `method:"DELETE" path:"/meetingplace/{MeetingPlaceId:string}"`
+deleteMeetingPlace  gorest.EndPoint `method:"DELETE" path:"/meetingplace/{MeetingPlaceId:int}"`
 
 
 
 // For the Route type
 listRoutes   gorest.EndPoint `method:"GET"    path:"/routes/"               output:"[]Route"`
-viewRoute    gorest.EndPoint `method:"GET"    path:"/route/{RouteId:string}"  output:"Route"`
+viewRoute    gorest.EndPoint `method:"GET"    path:"/route/{RouteId:int}"  output:"Route"`
 addRoute     gorest.EndPoint `method:"POST"   path:"/route/"                postdata:"Route"`
-deleteRoute  gorest.EndPoint `method:"DELETE" path:"/route/{RouteId:string}"`
+deleteRoute  gorest.EndPoint `method:"DELETE" path:"/route/{RouteId:int}"`
 
 
 
 }
 
 func(serv SimpleService) ListUsers()[]User{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
+
    return users.List()
 }
 
-func(serv SimpleService) ViewUser(id string)User{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewUser(id int)User{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return users.View(id)
 }
 
@@ -104,7 +105,7 @@ func(serv SimpleService) AddUser(i User){
       "http://localhost:8080/simple-service/users/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteUser(id string) {
+func(serv SimpleService) DeleteUser(id int) {
    users.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
@@ -113,12 +114,12 @@ func(serv SimpleService) DeleteUser(id string) {
 
 
 func(serv SimpleService) ListRatings()[]Rating{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return ratings.List()
 }
 
-func(serv SimpleService) ViewRating(id string)Rating{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewRating(id int)Rating{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return ratings.View(id)
 }
 
@@ -128,7 +129,7 @@ func(serv SimpleService) AddRating(i Rating){
       "http://localhost:8080/simple-service/ratings/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteRating(id string) {
+func(serv SimpleService) DeleteRating(id int) {
    ratings.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
@@ -137,12 +138,14 @@ func(serv SimpleService) DeleteRating(id string) {
 
 
 func(serv SimpleService) ListFoods()[]Food{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
+   serv.ResponseBuilder().AddHeader("Access-Control-Allow-Origin","http://localhost")
+
    return foods.List()
 }
 
-func(serv SimpleService) ViewFood(id string)Food{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewFood(id int)Food{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return foods.View(id)
 }
 
@@ -152,7 +155,7 @@ func(serv SimpleService) AddFood(i Food){
       "http://localhost:8080/simple-service/foods/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteFood(id string) {
+func(serv SimpleService) DeleteFood(id int) {
    foods.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
@@ -161,12 +164,12 @@ func(serv SimpleService) DeleteFood(id string) {
 
 
 func(serv SimpleService) ListBusStops()[]BusStop{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return busstops.List()
 }
 
-func(serv SimpleService) ViewBusStop(id string)BusStop{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewBusStop(id int)BusStop{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return busstops.View(id)
 }
 
@@ -176,7 +179,7 @@ func(serv SimpleService) AddBusStop(i BusStop){
       "http://localhost:8080/simple-service/busstops/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteBusStop(id string) {
+func(serv SimpleService) DeleteBusStop(id int) {
    busstops.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
@@ -185,12 +188,12 @@ func(serv SimpleService) DeleteBusStop(id string) {
 
 
 func(serv SimpleService) ListNeighborhoods()[]Neighborhood{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return neighborhoods.List()
 }
 
-func(serv SimpleService) ViewNeighborhood(id string)Neighborhood{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewNeighborhood(id int)Neighborhood{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return neighborhoods.View(id)
 }
 
@@ -200,7 +203,7 @@ func(serv SimpleService) AddNeighborhood(i Neighborhood){
       "http://localhost:8080/simple-service/neighborhoods/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteNeighborhood(id string) {
+func(serv SimpleService) DeleteNeighborhood(id int) {
    neighborhoods.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
@@ -209,12 +212,12 @@ func(serv SimpleService) DeleteNeighborhood(id string) {
 
 
 func(serv SimpleService) ListWorkplaces()[]Workplace{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return workplaces.List()
 }
 
-func(serv SimpleService) ViewWorkplace(id string)Workplace{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewWorkplace(id int)Workplace{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return workplaces.View(id)
 }
 
@@ -224,7 +227,7 @@ func(serv SimpleService) AddWorkplace(i Workplace){
       "http://localhost:8080/simple-service/workplaces/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteWorkplace(id string) {
+func(serv SimpleService) DeleteWorkplace(id int) {
    workplaces.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
@@ -233,12 +236,12 @@ func(serv SimpleService) DeleteWorkplace(id string) {
 
 
 func(serv SimpleService) ListRestaurants()[]Restaurant{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return restaurants.List()
 }
 
-func(serv SimpleService) ViewRestaurant(id string)Restaurant{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewRestaurant(id int)Restaurant{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return restaurants.View(id)
 }
 
@@ -248,7 +251,7 @@ func(serv SimpleService) AddRestaurant(i Restaurant){
       "http://localhost:8080/simple-service/restaurants/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteRestaurant(id string) {
+func(serv SimpleService) DeleteRestaurant(id int) {
    restaurants.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
@@ -257,12 +260,12 @@ func(serv SimpleService) DeleteRestaurant(id string) {
 
 
 func(serv SimpleService) ListMeetingPlaces()[]MeetingPlace{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return meetingplaces.List()
 }
 
-func(serv SimpleService) ViewMeetingPlace(id string)MeetingPlace{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewMeetingPlace(id int)MeetingPlace{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return meetingplaces.View(id)
 }
 
@@ -272,7 +275,7 @@ func(serv SimpleService) AddMeetingPlace(i MeetingPlace){
       "http://localhost:8080/simple-service/meetingplaces/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteMeetingPlace(id string) {
+func(serv SimpleService) DeleteMeetingPlace(id int) {
    meetingplaces.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
@@ -281,12 +284,12 @@ func(serv SimpleService) DeleteMeetingPlace(id string) {
 
 
 func(serv SimpleService) ListRoutes()[]Route{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return routes.List()
 }
 
-func(serv SimpleService) ViewRoute(id string)Route{
-   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day. More work to come on this, Etag, etc
+func(serv SimpleService) ViewRoute(id int)Route{
+   serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    return routes.View(id)
 }
 
@@ -296,7 +299,7 @@ func(serv SimpleService) AddRoute(i Route){
       "http://localhost:8080/simple-service/routes/"+string(itemAdded.Id))
 }
 
-func(serv SimpleService) DeleteRoute(id string) {
+func(serv SimpleService) DeleteRoute(id int) {
    routes.Delete(id)
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return

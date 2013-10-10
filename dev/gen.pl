@@ -7,9 +7,9 @@ use File::Slurp;
 my $api_tmpl = q#
 // %%comment%%
 list%%collection%%   gorest.EndPoint `method:"GET"    path:"/%%collectionlc%%/"               output:"[]%%object%%"`
-view%%object%%    gorest.EndPoint `method:"GET"    path:"/%%objectlc%%/{%%object%%Id:string}"  output:"%%object%%"`
+view%%object%%    gorest.EndPoint `method:"GET"    path:"/%%objectlc%%/{%%object%%Id:int}"  output:"%%object%%"`
 add%%object%%     gorest.EndPoint `method:"POST"   path:"/%%objectlc%%/"                postdata:"%%object%%"`
-delete%%object%%  gorest.EndPoint `method:"DELETE" path:"/%%objectlc%%/{%%object%%Id:string}"`
+delete%%object%%  gorest.EndPoint `method:"DELETE" path:"/%%objectlc%%/{%%object%%Id:int}"`
 #;
 
 my $test_tmpl = File::Slurp::read_file('dev/add_test.pl');

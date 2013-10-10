@@ -1,13 +1,13 @@
 package ui
 
 type Workplaces struct {
-	collection map[string]Workplace
+	collection map[int]Workplace
 	PublicAPI
 }
 
 func NewWorkplaces () Workplaces {
 	obj := Workplaces{}
-	obj.collection = make(map[string]Workplace,0)
+	obj.collection = make(map[int]Workplace,0)
 	return obj
 }
 
@@ -19,7 +19,7 @@ func(this Workplaces) List()[]Workplace {
 	return retval
 }
 
-func(this Workplaces) View(id string)Workplace{
+func(this Workplaces) View(id int)Workplace{
 	for ratingId,rating := range this.collection {
 		if id == ratingId {
 			return rating
@@ -37,12 +37,12 @@ func(this Workplaces) Add(i Workplace) Workplace{
     }
 
     //Item Id not in database, so create new
-    i.Id = string(len(this.collection))
+    i.Id = len(this.collection)
     this.collection[i.Id] = i
     return i
 }
 
-func(this Workplaces) Delete(id string) {
+func(this Workplaces) Delete(id int) {
 	for Id, _ := range this.collection {
 		if Id == id {
 			delete(this.collection,Id) // this borks things that are linked with this rating

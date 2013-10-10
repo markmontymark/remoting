@@ -1,13 +1,13 @@
 package ui
 
 type %%object%%s struct {
-	collection map[string]%%object%%
+	collection map[int]%%object%%
 	PublicAPI
 }
 
 func New%%object%%s () %%object%%s {
 	obj := %%object%%s{}
-	obj.collection = make(map[string]%%object%%,0)
+	obj.collection = make(map[int]%%object%%,0)
 	return obj
 }
 
@@ -19,7 +19,7 @@ func(this %%object%%s) List()[]%%object%% {
 	return retval
 }
 
-func(this %%object%%s) View(id string)%%object%%{
+func(this %%object%%s) View(id int)%%object%%{
 	for ratingId,rating := range this.collection {
 		if id == ratingId {
 			return rating
@@ -37,12 +37,12 @@ func(this %%object%%s) Add(i %%object%%) %%object%%{
     }
 
     //Item Id not in database, so create new
-    i.Id = string(len(this.collection))
+    i.Id = len(this.collection)
     this.collection[i.Id] = i
     return i
 }
 
-func(this %%object%%s) Delete(id string) {
+func(this %%object%%s) Delete(id int) {
 	for Id, _ := range this.collection {
 		if Id == id {
 			delete(this.collection,Id) // this borks things that are linked with this rating

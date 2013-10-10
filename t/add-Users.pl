@@ -1,4 +1,3 @@
-
 #!/usr/bin/env perl
 
 use Test::More;
@@ -23,11 +22,11 @@ my $tasks = [
 	POST->new( 
 		url => "$baseurl/user",
 		query => [
-			{Id=>"0",User=> 4},
-			{Id=>"1",User=> 3},
-			{Id=>"2",User=> 2},
-			{Id=>"3",User=> 5},
-			{Id=>"4",User=> 1},
+			{Id=>0,Name=> "Opie"},
+ 			{Id=>1,Name=> "Herr Renfield"},
+ 			{Id=>2,Name=> "Ted"},
+ 			{Id=>3,Name=> "Ned"},
+ 			{Id=>4,Name=> "Fred"},
 		]),
 
 	TestUrl->new(
@@ -35,7 +34,7 @@ my $tasks = [
 		decode => \&JSON::XS::decode_json,
 		tests => [ sub{
 			my $data = shift;
-			ok scalar @$data == 5, "Added 5 users";
+			is scalar @$data,5, "Added 5 users";
 		}]
 		),
 
@@ -44,7 +43,8 @@ my $tasks = [
 		decode => \&JSON::XS::decode_json,
 		tests => [ sub{
 			my $data = shift;
-			ok $data->{User} == 5 && $data->{Id} == 3, "View a user";
+			is $data->{Name},'Ned', "View a user, validate Name";
+			is $data->{Id}, 3, "View a user, validate Id";
 		}]
 		),
 	DELETE->new( 

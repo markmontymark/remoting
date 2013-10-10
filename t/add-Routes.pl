@@ -1,4 +1,3 @@
-
 #!/usr/bin/env perl
 
 use Test::More;
@@ -23,11 +22,11 @@ my $tasks = [
 	POST->new( 
 		url => "$baseurl/route",
 		query => [
-			{Id=>"0",Route=> 4},
-			{Id=>"1",Route=> 3},
-			{Id=>"2",Route=> 2},
-			{Id=>"3",Route=> 5},
-			{Id=>"4",Route=> 1},
+			{Id=>0,Route=> 4},
+			{Id=>1,Route=> 3},
+			{Id=>2,Route=> 2},
+			{Id=>3,Route=> 5},
+			{Id=>4,Route=> 1},
 		]),
 
 	TestUrl->new(

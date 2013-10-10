@@ -6,8 +6,8 @@ import (
 
 type User struct {
 	Ided
+	Named
    Worker
-   Name string
 }
 
 

@@ -1,13 +1,13 @@
 package ui
 
 type BusStops struct {
-	collection map[string]BusStop
+	collection map[int]BusStop
 	PublicAPI
 }
 
 func NewBusStops () BusStops {
 	obj := BusStops{}
-	obj.collection = make(map[string]BusStop,0)
+	obj.collection = make(map[int]BusStop,0)
 	return obj
 }
 
@@ -19,7 +19,7 @@ func(this BusStops) List()[]BusStop {
 	return retval
 }
 
-func(this BusStops) View(id string)BusStop{
+func(this BusStops) View(id int)BusStop{
 	for ratingId,rating := range this.collection {
 		if id == ratingId {
 			return rating
@@ -37,12 +37,12 @@ func(this BusStops) Add(i BusStop) BusStop{
     }
 
     //Item Id not in database, so create new
-    i.Id = string(len(this.collection))
+    i.Id = len(this.collection)
     this.collection[i.Id] = i
     return i
 }
 
-func(this BusStops) Delete(id string) {
+func(this BusStops) Delete(id int) {
 	for Id, _ := range this.collection {
 		if Id == id {
 			delete(this.collection,Id) // this borks things that are linked with this rating

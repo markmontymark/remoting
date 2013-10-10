@@ -1,4 +1,3 @@
-
 #!/usr/bin/env perl
 
 use Test::More;
@@ -18,16 +17,15 @@ my $baseurl = "http://localhost:$port/simple-service";
 
 my $tasks = [
 
-	GET->new( 
-		url => "$baseurl/meetingplaces" ),
+	GET->new( url => "$baseurl/meetingplaces" ),
 	POST->new( 
 		url => "$baseurl/meetingplace",
 		query => [
-			{Id=>"0",MeetingPlace=> 4},
-			{Id=>"1",MeetingPlace=> 3},
-			{Id=>"2",MeetingPlace=> 2},
-			{Id=>"3",MeetingPlace=> 5},
-			{Id=>"4",MeetingPlace=> 1},
+			{Id=>0,Name=> "Regus Diamond View"},
+			{Id=>1,Name=> "Regus Koll"},
+			{Id=>2,Name=> "Regus Emerald Plaza"},
+			{Id=>3,Name=> "Rebeccas"},
+			{Id=>4,Name=> "Home"},
 		]),
 
 	TestUrl->new(
@@ -35,7 +33,7 @@ my $tasks = [
 		decode => \&JSON::XS::decode_json,
 		tests => [ sub{
 			my $data = shift;
-			ok scalar @$data == 5, "Added 5 meetingplaces";
+			is scalar @$data , 5, "Added 5 meetingplaces";
 		}]
 		),
 
@@ -44,7 +42,8 @@ my $tasks = [
 		decode => \&JSON::XS::decode_json,
 		tests => [ sub{
 			my $data = shift;
-			ok $data->{MeetingPlace} == 5 && $data->{Id} == 3, "View a meetingplace";
+			is $data->{MeetingPlace} , 5, 'View a meetingplace, name check';
+			is $data->{Id}, 3, "View a meetingplace, id check";
 		}]
 		),
 	DELETE->new( 

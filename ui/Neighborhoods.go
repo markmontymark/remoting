@@ -1,13 +1,13 @@
 package ui
 
 type Neighborhoods struct {
-	collection map[string]Neighborhood
+	collection map[int]Neighborhood
 	PublicAPI
 }
 
 func NewNeighborhoods () Neighborhoods {
 	obj := Neighborhoods{}
-	obj.collection = make(map[string]Neighborhood,0)
+	obj.collection = make(map[int]Neighborhood,0)
 	return obj
 }
 
@@ -19,7 +19,7 @@ func(this Neighborhoods) List()[]Neighborhood {
 	return retval
 }
 
-func(this Neighborhoods) View(id string)Neighborhood{
+func(this Neighborhoods) View(id int)Neighborhood{
 	for ratingId,rating := range this.collection {
 		if id == ratingId {
 			return rating
@@ -37,12 +37,12 @@ func(this Neighborhoods) Add(i Neighborhood) Neighborhood{
     }
 
     //Item Id not in database, so create new
-    i.Id = string(len(this.collection))
+    i.Id = len(this.collection)
     this.collection[i.Id] = i
     return i
 }
 
-func(this Neighborhoods) Delete(id string) {
+func(this Neighborhoods) Delete(id int) {
 	for Id, _ := range this.collection {
 		if Id == id {
 			delete(this.collection,Id) // this borks things that are linked with this rating

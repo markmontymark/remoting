@@ -1,13 +1,13 @@
 package ui
 
 type Restaurants struct {
-	collection map[string]Restaurant
+	collection map[int]Restaurant
 	PublicAPI
 }
 
 func NewRestaurants () Restaurants {
 	obj := Restaurants{}
-	obj.collection = make(map[string]Restaurant,0)
+	obj.collection = make(map[int]Restaurant,0)
 	return obj
 }
 
@@ -19,7 +19,7 @@ func(this Restaurants) List()[]Restaurant {
 	return retval
 }
 
-func(this Restaurants) View(id string)Restaurant{
+func(this Restaurants) View(id int)Restaurant{
 	for ratingId,rating := range this.collection {
 		if id == ratingId {
 			return rating
@@ -37,12 +37,12 @@ func(this Restaurants) Add(i Restaurant) Restaurant{
     }
 
     //Item Id not in database, so create new
-    i.Id = string(len(this.collection))
+    i.Id = len(this.collection)
     this.collection[i.Id] = i
     return i
 }
 
-func(this Restaurants) Delete(id string) {
+func(this Restaurants) Delete(id int) {
 	for Id, _ := range this.collection {
 		if Id == id {
 			delete(this.collection,Id) // this borks things that are linked with this rating

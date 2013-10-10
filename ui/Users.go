@@ -1,13 +1,13 @@
 package ui
 
 type Users struct {
-	collection map[string]User
+	collection map[int]User
 	PublicAPI
 }
 
 func NewUsers () Users {
 	obj := Users{}
-	obj.collection = make(map[string]User,0)
+	obj.collection = make(map[int]User,0)
 	return obj
 }
 
@@ -19,7 +19,7 @@ func(this Users) List()[]User {
 	return retval
 }
 
-func(this Users) View(id string)User{
+func(this Users) View(id int)User{
 	for ratingId,rating := range this.collection {
 		if id == ratingId {
 			return rating
@@ -37,12 +37,12 @@ func(this Users) Add(i User) User{
     }
 
     //Item Id not in database, so create new
-    i.Id = string(len(this.collection))
+    i.Id = len(this.collection)
     this.collection[i.Id] = i
     return i
 }
 
-func(this Users) Delete(id string) {
+func(this Users) Delete(id int) {
 	for Id, _ := range this.collection {
 		if Id == id {
 			delete(this.collection,Id) // this borks things that are linked with this rating
