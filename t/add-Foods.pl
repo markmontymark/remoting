@@ -13,7 +13,7 @@ use JSON::XS;
 ##Go::FindTypes::finder( './' );
 
 my $port = shift || '8080';
-my $baseurl = "http://localhost:$port/simple-service";
+my $baseurl = "http://localhost:8080/simple-service";
 
 my $tasks = [
 

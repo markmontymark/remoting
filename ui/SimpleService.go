@@ -4,8 +4,8 @@ package ui
 
 import (
    "code.google.com/p/gorest"
-   //"appengine"
-   //"appengine/datastore"
+   "appengine"
+   "appengine/datastore"
    //"appengine/user"
 )
 
@@ -151,6 +151,15 @@ func(serv SimpleService) ViewFood(id int)Food{
 
 func(serv SimpleService) AddFood(i Food){
    itemAdded := foods.Add(i)
+	ctx := appengine.NewContext( serv.Context.Request())
+	/*key, err := */datastore.Put(ctx, datastore.NewIncompleteKey(ctx, "food", nil), &itemAdded)
+	/*
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	*/
+
    serv.ResponseBuilder().Created(
       "http://localhost:8080/simple-service/foods/"+string(itemAdded.Id))
 }

@@ -72,37 +72,6 @@ type Seating struct {
 		available_outlets int
 }
 
-/*
-type WorkplaceLocation struct {
-	Location
-	Locator
-	Rating
-	Rater
-	Seating
-	WifiUpness Rating
-}
-
-type FoodLocation struct {
-	Location
-	Locator
-	Rating
-	Rater	
-	Seating
-}
-
-type MeetingLocation struct {
-	Location
-	Locator
-	Rating
-	Rater	
-}
-
-*/
-
-//type Route struct {
-	//busStops []BusStopLocation
-//}
-
 type WorkLog struct {
 	timeIn time.Time
 	timeOut time.Time
@@ -117,7 +86,6 @@ type DaysWork struct {
 }
 
 func init() {
-
 	ratings = NewRatings() //make(map[int]Rating)
 	users = NewUsers() //	users = make(map[int]User)
 	foods = NewFoods()
