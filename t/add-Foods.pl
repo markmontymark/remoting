@@ -22,11 +22,11 @@ my $tasks = [
 	POST->new( 
 		url => "$baseurl/food",
 		query => [
-			{Id=>-1,Name=> "Cupcakes"},
-			{Id=>-1,Name=> "Cookies"},
-			{Id=>-1,Name=> "Salad"},
-			{Id=>-1,Name=> "Croissants"},
-			{Id=>-1,Name=> "Bagels"},
+			{Id=>-1,Name=> "Asdf"},
+			{Id=>-1,Name=> "Fdsa"},
+			{Id=>-1,Name=> "Dsawefa"},
+			{Id=>-1,Name=> "ASDf ewfawf"},
+			{Id=>-1,Name=> "123 FDSAeff"},
 		]),
 
 	TestUrl->new(

@@ -6,6 +6,8 @@ import (
    "code.google.com/p/gorest"
    "appengine"
    "appengine/datastore"
+	//"fmt"
+	//"os"
    //"appengine/user"
 )
 
@@ -13,6 +15,8 @@ type SimpleService struct{
     //Service level config
     gorest.RestService    `root:"/simple-service/" consumes:"application/json" produces:"application/json"`
 
+options     		gorest.EndPoint `method:"OPTIONS" path:"/"`
+optionsFoods     	gorest.EndPoint `method:"OPTIONS" path:"/foods/{FoodId:int}"`
 	
 // For the User type
 listUsers   gorest.EndPoint `method:"GET"    path:"/users/"               output:"[]User"`
@@ -35,6 +39,7 @@ listFoods   gorest.EndPoint `method:"GET"    path:"/foods/"               output
 viewFood    gorest.EndPoint `method:"GET"    path:"/food/{FoodId:int}"  output:"Food"`
 addFood     gorest.EndPoint `method:"POST"   path:"/food/"                postdata:"Food"`
 deleteFood  gorest.EndPoint `method:"DELETE" path:"/food/{FoodId:int}"`
+deleteFoods  gorest.EndPoint `method:"DELETE" path:"/foods/{FoodId:int}"`
 
 
 
@@ -140,7 +145,8 @@ func(serv SimpleService) DeleteRating(id int) {
 func(serv SimpleService) ListFoods()[]Food{
    serv.ResponseBuilder().CacheMaxAge(60*60*24) //List cacheable for a day
    serv.ResponseBuilder().AddHeader("Access-Control-Allow-Origin","http://localhost")
-
+	serv.ResponseBuilder().AddHeader("Access-Control-Allow-Headers","origin, x-requested-with, content-type")
+	serv.ResponseBuilder().AddHeader("Access-Control-Allow-Methods","POST,GET,PUT,OPTIONS,DELETE")
    return foods.List()
 }
 
@@ -166,8 +172,11 @@ func(serv SimpleService) AddFood(i Food){
 
 func(serv SimpleService) DeleteFood(id int) {
    foods.Delete(id)
-   serv.ResponseBuilder().SetResponseCode(404).Overide(true)
+   serv.ResponseBuilder().SetResponseCode(204).Overide(true)
    return
+}
+func(serv SimpleService) DeleteFoods(id int) {
+	serv.DeleteFood(id)
 }
 
 
@@ -193,7 +202,6 @@ func(serv SimpleService) DeleteBusStop(id int) {
    serv.ResponseBuilder().SetResponseCode(404).Overide(true)
    return
 }
-
 
 
 func(serv SimpleService) ListNeighborhoods()[]Neighborhood{
@@ -317,3 +325,15 @@ func(serv SimpleService) DeleteRoute(id int) {
 
 
 
+func(serv SimpleService) Options() {
+	//fmt.Fprintf( os.Stderr, "in OptionsFood with id %v\n",id)
+   serv.ResponseBuilder().AddHeader("Access-Control-Allow-Origin","http://localhost")
+	serv.ResponseBuilder().AddHeader("Access-Control-Allow-Headers","origin, x-requested-with, content-type")
+	serv.ResponseBuilder().AddHeader("Access-Control-Allow-Methods","POST,GET,PUT,OPTIONS,DELETE")
+   serv.ResponseBuilder().SetResponseCode(200).Overide(true)
+   return
+}
+func(serv SimpleService) OptionsFoods(id int) {
+	serv.Options()
+	return
+}
